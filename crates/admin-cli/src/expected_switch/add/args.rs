@@ -37,6 +37,8 @@ pub struct Args {
     )]
     pub switch_serial_number: String,
 
+    #[clap(long, help = "NVOS MAC address of the expected switch")]
+    pub nvos_mac_address: Option<MacAddress>,
     #[clap(long, help = "NVOS username of the expected switch")]
     pub nvos_username: Option<String>,
     #[clap(long, help = "NVOS password of the expected switch")]
@@ -89,6 +91,7 @@ impl From<Args> for rpc::forge::ExpectedSwitch {
             switch_serial_number: value.switch_serial_number,
             metadata: Some(metadata),
             rack_id: value.rack_id,
+            nvos_mac_address: value.nvos_mac_address.map(|m| m.to_string()),
             nvos_username: value.nvos_username,
             nvos_password: value.nvos_password,
         }

@@ -27,6 +27,9 @@ use uuid::Uuid;
 "bmc_username",
 "bmc_password",
 "switch_serial_number",
+"nvos_mac_address",
+"nvos_username",
+"nvos_password",
 ])))]
 pub struct Args {
     #[clap(short = 'a', long, help = "BMC MAC Address of the expected switch")]
@@ -59,6 +62,12 @@ pub struct Args {
     )]
     pub switch_serial_number: Option<String>,
 
+    #[clap(
+        long,
+        group = "group",
+        help = "NVOS MAC address of the expected switch"
+    )]
+    pub nvos_mac_address: Option<MacAddress>,
     #[clap(long, group = "group", help = "NVOS username of the expected switch")]
     pub nvos_username: Option<String>,
     #[clap(long, group = "group", help = "NVOS password of the expected switch")]
@@ -140,6 +149,7 @@ impl TryFrom<Args> for rpc::forge::ExpectedSwitch {
                 labels: crate::metadata::parse_rpc_labels(args.labels.unwrap_or_default()),
             }),
             rack_id: args.rack_id,
+            nvos_mac_address: args.nvos_mac_address.map(|m| m.to_string()),
         })
     }
 }

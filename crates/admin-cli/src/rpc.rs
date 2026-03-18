@@ -550,7 +550,6 @@ impl ApiClient {
 
         Ok(self.0.update_expected_machine(request).await?)
     }
-
     pub async fn replace_all_expected_machines(
         &self,
         expected_machine_list: Vec<ExpectedMachineJson>,
@@ -621,6 +620,7 @@ impl ApiClient {
                     bmc_username: switch.bmc_username,
                     bmc_password: switch.bmc_password,
                     switch_serial_number: switch.switch_serial_number,
+                    nvos_mac_address: switch.nvos_mac_address.map(|m| m.to_string()),
                     nvos_username: switch.nvos_username,
                     nvos_password: switch.nvos_password,
                     metadata: switch.metadata,
