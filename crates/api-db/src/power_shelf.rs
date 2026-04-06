@@ -333,15 +333,17 @@ pub async fn find_bmc_ips_by_power_shelf_ids(
         .map_err(|err| DatabaseError::new("power_shelf::find_bmc_ips_by_power_shelf_ids", err))
 }
 
-/// Full endpoint info for a power shelf: PMC MAC and PMC IP.
+/// Full endpoint info for a power shelf: PMC MAC, IP, and credentials.
 #[derive(Debug, sqlx::FromRow)]
 pub struct PowerShelfEndpointRow {
     pub power_shelf_id: PowerShelfId,
     pub pmc_mac: MacAddress,
     pub pmc_ip: IpAddr,
+    pub pmc_username: String,
+    pub pmc_password: String,
 }
 
-/// Resolve PowerShelfIds to PMC MAC + IP.
+/// Resolve PowerShelfIds to PMC MAC + IP + credentials.
 pub async fn find_power_shelf_endpoints_by_ids(
     db: impl crate::db_read::DbReader<'_>,
     power_shelf_ids: &[PowerShelfId],
@@ -350,7 +352,9 @@ pub async fn find_power_shelf_endpoints_by_ids(
         SELECT
             ps.id                AS power_shelf_id,
             eps.bmc_mac_address  AS pmc_mac,
-            eps.bmc_ip_address       AS pmc_ip
+            eps.bmc_ip_address   AS pmc_ip,
+            eps.bmc_username     AS pmc_username,
+            eps.bmc_password     AS pmc_password
         FROM power_shelves ps
         JOIN expected_power_shelves eps ON eps.serial_number = ps.config->>'name'
         WHERE ps.id = ANY($1)

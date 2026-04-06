@@ -71,7 +71,10 @@ async fn register_with_psm(
             pmc_mac_address: ep.pmc_mac.to_string(),
             pmc_ip_address: ep.pmc_ip.to_string(),
             pmc_vendor: map_vendor(&ep.pmc_vendor),
-            pmc_credentials: None,
+            pmc_credentials: Some(psm::Credentials {
+                username: ep.pmc_username.clone(),
+                password: ep.pmc_password.clone(),
+            }),
         })
         .collect();
 
@@ -429,11 +432,15 @@ mod tests {
                 pmc_ip: "10.0.0.1".parse().unwrap(),
                 pmc_mac: "AA:BB:CC:DD:EE:01".parse().unwrap(),
                 pmc_vendor: PowerShelfVendor::Liteon,
+                pmc_username: "admin".into(),
+                pmc_password: "pass".into(),
             },
             PowerShelfEndpoint {
                 pmc_ip: "10.0.0.2".parse().unwrap(),
                 pmc_mac: "AA:BB:CC:DD:EE:02".parse().unwrap(),
                 pmc_vendor: PowerShelfVendor::Unknown,
+                pmc_username: "admin".into(),
+                pmc_password: "pass".into(),
             },
         ];
         let macs = mac_strings(&eps);

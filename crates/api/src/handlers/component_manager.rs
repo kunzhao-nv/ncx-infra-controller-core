@@ -244,6 +244,8 @@ async fn resolve_power_shelf_endpoints(
             pmc_mac: row.pmc_mac,
             // TODO: retrieve vendor from DB instead of using a hardcoded default
             pmc_vendor: PowerShelfVendor::DEFAULT,
+            pmc_username: row.pmc_username,
+            pmc_password: row.pmc_password,
         });
     }
 

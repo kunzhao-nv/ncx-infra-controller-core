@@ -9,13 +9,15 @@ use mac_address::MacAddress;
 use crate::error::ComponentManagerError;
 use crate::types::{FirmwareState, PowerAction, PowerShelfComponent};
 
-/// Physical network identifiers for a power shelf, used to register with and
-/// operate against the backend service (PSM).
+/// Physical network identifiers and credentials for a power shelf, used to
+/// register with and operate against the backend service (PSM).
 #[derive(Debug, Clone)]
 pub struct PowerShelfEndpoint {
     pub pmc_ip: IpAddr,
     pub pmc_mac: MacAddress,
     pub pmc_vendor: PowerShelfVendor,
+    pub pmc_username: String,
+    pub pmc_password: String,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
