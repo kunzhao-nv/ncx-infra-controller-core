@@ -2,7 +2,7 @@
 
 ## Goals
 
-The API should answer four questions:
+The discussion raised the following questions:
 
 - Which event rule handles leakage, and where is it enabled or bound?
 - Is a tray leaking, and what handling has occurred?
