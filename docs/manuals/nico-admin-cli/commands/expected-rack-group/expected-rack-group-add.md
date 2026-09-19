@@ -1,0 +1,85 @@
+# `nico-admin-cli expected-rack-group add`
+
+*[Tenant commands](../../tenant.md) › [expected-rack-group](./expected-rack-group.md) › **add***
+
+## NAME
+
+nico-admin-cli-expected-rack-group-add - Add an expected rack group
+
+## SYNOPSIS
+
+```text
+nico-admin-cli expected-rack-group add [--rack-id]
+[--member] [--meta-name] [--meta-description]
+[--label] [--extended] [--sort-by]
+[-h|--help] <RACK_GROUP_ID> <TOPOLOGY>
+```
+
+## DESCRIPTION
+
+Add an expected rack group
+
+## OPTIONS
+
+`--rack-id <RACK_IDS>`
+
+Rack ID; repeat for each rack. Omission supplies an empty list
+
+`--member <MEMBERS>`
+
+Device JSON with type, manufacturer and id; repeat for each device.
+Omission supplies an empty list
+
+`--meta-name <META_NAME>`
+
+Metadata name (ASCII, at most 256 characters). Defaults to empty
+
+`--meta-description <META_DESCRIPTION>`
+
+Metadata description (at most 1024 bytes). Defaults to empty
+
+`--label <LABELS>`
+
+Metadata label as KEY:VALUE; repeat for each label. Omission supplies no
+labels
+
+`--extended`
+
+Extended result output.
+
+This is used by measured boot, where basic output contains just what you
+probably care about, and "extended" output also dumps out all the
+internal UUIDs that are used to associate instances.
+
+`--sort-by <SORT_BY> [default: primary-id]`
+
+Sort output by specified field
+
+*Possible values:*
+
+> - primary-id: Sort by the primary ID
+>
+> - state: Sort by state
+
+`-h, --help`
+
+Print help (see a summary with -h)
+
+`<RACK_GROUP_ID>`
+
+Externally assigned group ID; UUID syntax is not required
+
+`<TOPOLOGY>`
+
+External topology identifier
+
+## Examples
+
+```sh
+nico-admin-cli expected-rack-group add nvl5-gp1-jhb01 gb200_nvl72r1_c2g4
+nico-admin-cli expected-rack-group add nvl5-gp1-jhb01 gb200_nvl72r1_c2g4 --rack-id rack-01 --rack-id rack-02 --member '{"type":"switch","manufacturer":"NVIDIA","id":"switch-01"}' --meta-name nvl5-gp1-jhb01 --label location.datacenter:JHB01
+```
+
+---
+
+**Related:** [Tenant commands](../../tenant.md) · [CLI reference index](../../README.md)
