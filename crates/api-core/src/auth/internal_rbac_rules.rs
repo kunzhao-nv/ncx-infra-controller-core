@@ -960,6 +960,11 @@ impl InternalRBACRules {
             vec![ForgeAdminCLI, Machineatron, SiteAgent],
         );
         x.perm("CreateExpectedNvLinkDomain", vec![ForgeAdminCLI, Flow]);
+        x.perm("CreateNvLinkDomain", vec![ForgeAdminCLI, Flow]);
+        x.perm("DeleteNvLinkDomain", vec![ForgeAdminCLI, Flow]);
+        x.perm("GetNvLinkDomain", vec![ForgeAdminCLI, Flow]);
+        x.perm("FindNvLinkDomainIds", vec![ForgeAdminCLI, Flow]);
+        x.perm("FindNvLinkDomainsByIds", vec![ForgeAdminCLI, Flow]);
         x.perm("DeleteExpectedNvLinkDomain", vec![ForgeAdminCLI, Flow]);
         x.perm("GetExpectedNvLinkDomain", vec![ForgeAdminCLI, Flow]);
         x.perm("FindExpectedNvLinkDomainIds", vec![ForgeAdminCLI, Flow]);
@@ -1567,6 +1572,11 @@ mod rbac_rule_tests {
                 "GetExpectedNvLinkDomain",
                 "FindExpectedNvLinkDomainIds",
                 "FindExpectedNvLinkDomainsByIds",
+                "CreateNvLinkDomain",
+                "DeleteNvLinkDomain",
+                "GetNvLinkDomain",
+                "FindNvLinkDomainIds",
+                "FindNvLinkDomainsByIds",
             ]
             .map(|method| Check {
                 scenario: method,

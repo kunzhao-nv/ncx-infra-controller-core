@@ -96,6 +96,7 @@ mod network_segment;
 mod nvl_domain;
 mod nvl_logical_partition;
 mod nvl_partition;
+mod nvlink_domain;
 mod nvlink_nmxc_endpoints;
 mod operating_system;
 mod os_image;

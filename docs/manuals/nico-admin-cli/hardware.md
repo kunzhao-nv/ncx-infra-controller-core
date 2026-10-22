@@ -28,6 +28,7 @@ For build and connection setup, refer to the [NICo Admin CLI guide](../nico-admi
 | [`managed-switch`](./commands/managed-switch/managed-switch.md) | Managed switch related handling. |
 | [`mlx`](./commands/mlx/mlx.md) | Mellanox Device Handling. |
 | [`nvl-partition`](./commands/nvl-partition/nvl-partition.md) | NvLink Partition related handling. |
+| [`nvlink-domain`](./commands/nvlink-domain/nvlink-domain.md) | NVLink Domain lifecycle management. |
 | [`nvlink-nmxc-endpoints`](./commands/nvlink-nmxc-endpoints/nvlink-nmxc-endpoints.md) | Rack chassis serial → NMX-C endpoint mappings. |
 | [`power-shelf`](./commands/power-shelf/power-shelf.md) | Power Shelf management. |
 | [`rack`](./commands/rack/rack.md) | Rack Management. |

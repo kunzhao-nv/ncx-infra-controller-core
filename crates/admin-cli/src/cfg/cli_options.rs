@@ -248,6 +248,8 @@ pub(crate) enum CliCommand {
         subcommand
     )]
     ExpectedNvlinkDomain(crate::expected_nvlink_domain::Cmd),
+    #[clap(about = "NVLink Domain lifecycle management", subcommand)]
+    NvlinkDomain(crate::nvlink_domain::Cmd),
     #[clap(about = "Expected switch handling", subcommand, visible_alias = "ew")]
     ExpectedSwitch(expected_switch::Cmd),
     #[clap(
