@@ -44,6 +44,7 @@ pub mod compute_allocation;
 pub mod controller_outcome;
 pub mod dhcp_record;
 pub mod dns;
+pub mod domain_profile;
 pub mod dpa_interface;
 pub mod dpu_machine_update;
 pub mod dpu_remediation;

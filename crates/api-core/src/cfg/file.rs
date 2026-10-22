@@ -837,6 +837,11 @@ pub struct CarbideConfig {
     #[serde(default)]
     pub rack_profiles: model::rack_type::RackProfileConfig,
 
+    /// Fabric profiles keyed by case-sensitive Domain Profile ID. Empty by default;
+    /// creating a Domain requires a configured profile. Changes require restart.
+    #[serde(default)]
+    pub domain_profiles: HashMap<String, model::domain_profile::DomainProfile>,
+
     /// SPDM (Security Protocol and Data Model) configuration for hardware attestation.
     #[serde(default)]
     pub spdm: SpdmConfig,
