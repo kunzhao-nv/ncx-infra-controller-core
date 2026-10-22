@@ -17,6 +17,7 @@ import (
 )
 
 type mockClient struct {
+	nvLinkDomains                 []*corev1.NvLinkDomain
 	machines                      map[string]MachineDetail
 	powerStates                   map[string]PowerState
 	machineInterfaces             map[string]MachineInterface
@@ -308,6 +309,15 @@ func (c *mockClient) GetObservedNVLinkDomainMemberships(_ context.Context) ([]NV
 	out := make([]NVLinkDomainMembership, len(c.nvLinkDomainMemberships))
 	copy(out, c.nvLinkDomainMemberships)
 	return out, nil
+}
+
+func (c *mockClient) GetNVLinkDomains(_ context.Context) ([]*corev1.NvLinkDomain, error) {
+	return append([]*corev1.NvLinkDomain{}, c.nvLinkDomains...), nil
+}
+
+// SetNVLinkDomains replaces the declared-domain snapshot returned by the mock.
+func (c *mockClient) SetNVLinkDomains(domains []*corev1.NvLinkDomain) {
+	c.nvLinkDomains = append([]*corev1.NvLinkDomain{}, domains...)
 }
 
 // SetObservedNVLinkDomainMemberships replaces the Core domain observations
