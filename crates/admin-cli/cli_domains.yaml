@@ -42,6 +42,7 @@ hardware:
   - trim-table
   - nvl-partition
   - nvlink-nmxc-endpoints
+  - nvlink-domain
   - browse
 
 network:

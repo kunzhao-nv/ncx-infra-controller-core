@@ -642,6 +642,17 @@ service Forge {
   // Delete all expected racks in site
   rpc DeleteAllExpectedRacks(google.protobuf.Empty) returns (google.protobuf.Empty);
 
+  // Create a Domain and reserve its members for asynchronous fabric reconciliation.
+  rpc CreateNvLinkDomain(CreateNvLinkDomainRequest) returns (NvLinkDomain);
+  // Request asynchronous teardown; membership remains reserved until teardown completes.
+  rpc DeleteNvLinkDomain(NvLinkDomainRequest) returns (google.protobuf.Empty);
+  // Read Domain intent and persisted lifecycle progress.
+  rpc GetNvLinkDomain(NvLinkDomainRequest) returns (NvLinkDomain);
+  // List stable Domain IDs in UUID order, including pending deletions.
+  rpc FindNvLinkDomainIds(NvLinkDomainSearchFilter) returns (NvLinkDomainIdList);
+  // Read a bounded batch, omitting missing IDs and collapsing duplicates.
+  rpc FindNvLinkDomainsByIds(NvLinkDomainsByIdsRequest) returns (NvLinkDomainList);
+
   // Administrator-managed expected NVLink domain inventory
   // Declare immutable expected membership. This does not configure hardware or validate
   // physical NVLink connectivity. Unknown/ambiguous members and wrong-group racks are rejected.
@@ -12329,6 +12340,102 @@ message ExpectedNvLinkDomainsByIdsRequest {
   // Nonempty batch of non-nil UUIDs, limited by max_find_by_ids. Missing IDs are
   // omitted and duplicates collapsed; results are sorted by UUID.
   repeated common.UUID ids = 1;
+}
+
+// Component roles eligible for Domain membership.
+enum NvLinkDomainComponentType {
+  NV_LINK_DOMAIN_COMPONENT_TYPE_UNSPECIFIED = 0;
+  NV_LINK_DOMAIN_COMPONENT_TYPE_COMPUTE = 1;
+  NV_LINK_DOMAIN_COMPONENT_TYPE_SWITCH = 2;
+}
+
+// A tray selected by the operator, independent of current readiness.
+message NvLinkDomainMember {
+  // Required compute or switch role; unspecified and unknown values are rejected.
+  NvLinkDomainComponentType component_type = 1;
+  // Required external Rack ID; matching is case-sensitive.
+  common.RackId rack_id = 2;
+  // Required non-negative RMS/NMX-C tray index. Zero is a valid position.
+  optional int32 tray_index = 3;
+}
+
+// Complete operator-owned Domain declaration.
+message NvLinkDomainConfig {
+  // Required existing physical RackGroup.
+  common.RackGroupId rack_group_id = 1;
+  // Required site-configured Domain Profile ID; matching is case-sensitive.
+  string domain_profile_id = 2;
+  // Distinct members, including at least one compute and one switch tray.
+  // Order has no semantic meaning. Claims cannot overlap another Domain.
+  repeated NvLinkDomainMember members = 3;
+}
+
+// Persisted Domain lifecycle phase.
+enum NvLinkDomainLifecycleState {
+  NV_LINK_DOMAIN_LIFECYCLE_STATE_UNSPECIFIED = 0;
+  NV_LINK_DOMAIN_LIFECYCLE_STATE_DISCOVERING = 1;
+  NV_LINK_DOMAIN_LIFECYCLE_STATE_CONFIGURING = 2;
+  NV_LINK_DOMAIN_LIFECYCLE_STATE_READY = 3;
+  NV_LINK_DOMAIN_LIFECYCLE_STATE_MAINTENANCE = 4;
+  NV_LINK_DOMAIN_LIFECYCLE_STATE_DELETING = 5;
+}
+
+// Controller-owned progress, distinct from desired configuration.
+message NvLinkDomainStatus {
+  // Persisted phase; deletion_requested may precede the deleting phase.
+  NvLinkDomainLifecycleState state = 1;
+  // Observed NMX-C identity; absent before observation.
+  common.UUID nmxc_domain_id = 2;
+  // True after deletion is requested and until teardown removes the resource.
+  bool deletion_requested = 3;
+  // Last wait reason or error, absent when the iteration has no diagnostic.
+  optional string state_reason = 4;
+  // Independently versioned controller progress.
+  string state_version = 5;
+}
+
+// Stable Domain identity, desired configuration, and observed lifecycle.
+message NvLinkDomain {
+  // Core-generated resource UUID, independent of the NMX-C cluster UUID.
+  common.UUID id = 1;
+  Metadata metadata = 2;
+  NvLinkDomainConfig config = 3;
+  NvLinkDomainStatus status = 4;
+  // Optimistic-concurrency token for desired configuration.
+  string version = 5;
+  // True when RackGroup automation owns this declaration.
+  bool managed = 6;
+}
+
+// Create a manually managed Domain. Missing metadata defaults to empty metadata.
+message CreateNvLinkDomainRequest {
+  NvLinkDomainConfig config = 1;
+  Metadata metadata = 2;
+}
+
+// Select a Domain by its required, non-nil resource UUID.
+message NvLinkDomainRequest {
+  common.UUID id = 1;
+}
+
+// Filter Domain IDs by physical RackGroup; omission lists all.
+message NvLinkDomainSearchFilter {
+  common.RackGroupId rack_group_id = 1;
+}
+
+// Domain resource IDs sorted by UUID.
+message NvLinkDomainIdList {
+  repeated common.UUID ids = 1;
+}
+
+// Nonempty batch of non-nil UUIDs, bounded by max_find_by_ids.
+message NvLinkDomainsByIdsRequest {
+  repeated common.UUID ids = 1;
+}
+
+// Domains sorted by UUID; missing IDs are omitted.
+message NvLinkDomainList {
+  repeated NvLinkDomain domains = 1;
 }
 
 message ExpectedNvLinkDomainList {

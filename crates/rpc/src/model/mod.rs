@@ -54,6 +54,7 @@ mod nic_firmware;
 pub mod nmxc;
 pub mod nvl_logical_partition;
 pub mod nvl_partition;
+pub mod nvlink_domain;
 pub mod operating_system_definition;
 pub mod os;
 pub mod power_manager;
